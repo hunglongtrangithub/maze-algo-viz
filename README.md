@@ -28,7 +28,7 @@ This project is a visualization of different maze generating and solving algorit
 
 ````
 ```bash
-g++ -std=c++17 *.cpp
+g++ -std=c++11 *.cpp
 ./a.out
 ```
 ````

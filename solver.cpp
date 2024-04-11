@@ -15,18 +15,22 @@ struct Cell {
   bool operator>(const Cell &other) const { return cost > other.cost; }
 };
 
-bool findPathAStar(std::vector<std::vector<char>> &maze, int x, int y,
-                   std::function<int(int, int, int, int)> heuristic) {
+// Choose a default heuristic for A* search
+int defaultHeuristic(int x1, int y1, int x2, int y2) {
+    return abs(x1 - x2) + abs(y1 - y2);  // Example heuristic (Manhattan distance)
+}
+bool findPathAStar(std::vector<std::vector<char> > &maze, int x, int y,
+                   int (*heuristic)(int, int, int, int)) {
   int rows = maze.size();
   int cols = maze[0].size();
 
   // set up priority queue with custom comparator
-  std::priority_queue<Cell *, std::vector<Cell *>, std::greater<Cell *>> queue;
+  std::priority_queue<Cell *, std::vector<Cell *>, std::greater<Cell *> > queue;
   // set up costs matrix
-  std::vector<std::vector<int>> costs(
+  std::vector<std::vector<int> > costs(
       rows, std::vector<int>(cols, std::numeric_limits<int>::max()));
   // set up visited matrix
-  std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+  std::vector<std::vector<bool> > visited(rows, std::vector<bool>(cols, false));
 
   // Enqueue start position with cost 0
   queue.push(new Cell(x, y, nullptr, 0));
@@ -77,17 +81,17 @@ bool findPathAStar(std::vector<std::vector<char>> &maze, int x, int y,
   return false; // No path found
 }
 
-bool findPathDijkstra(std::vector<std::vector<char>> &maze, int x, int y) {
+bool findPathDijkstra(std::vector<std::vector<char> > &maze, int x, int y) {
   int rows = maze.size();
   int cols = maze[0].size();
 
   // Set up priority queue with custom comparator
-  std::priority_queue<Cell *, std::vector<Cell *>, std::greater<Cell *>> queue;
+  std::priority_queue<Cell *, std::vector<Cell *>, std::greater<Cell *> > queue;
   // Set up costs matrix
-  std::vector<std::vector<int>> costs(
+  std::vector<std::vector<int> > costs(
       rows, std::vector<int>(cols, std::numeric_limits<int>::max()));
   // Set up visited matrix
-  std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+  std::vector<std::vector<bool> > visited(rows, std::vector<bool>(cols, false));
 
   // Enqueue start position with cost 0
   queue.push(new Cell(x, y, nullptr, 0));
@@ -137,14 +141,14 @@ bool findPathDijkstra(std::vector<std::vector<char>> &maze, int x, int y) {
   return false; // No path found
 }
 
-bool findPathBFS(std::vector<std::vector<char>> &maze, int x, int y) {
+bool findPathBFS(std::vector<std::vector<char> > &maze, int x, int y) {
   int rows = maze.size();
   int cols = maze[0].size();
 
   std::queue<Cell *> queue;
   queue.push(new Cell(x, y, nullptr)); // Enqueue start position
 
-  std::vector<std::vector<bool>> visited(rows, std::vector<bool>(cols, false));
+  std::vector<std::vector<bool> > visited(rows, std::vector<bool>(cols, false));
   visited[y][x] = true;
 
   int dx[4] = {1, -1, 0, 0};
@@ -187,7 +191,7 @@ bool findPathBFS(std::vector<std::vector<char>> &maze, int x, int y) {
   return false; // No path found
 }
 
-bool findPathDFS(std::vector<std::vector<char>> &maze, int startX, int startY) {
+bool findPathDFS(std::vector<std::vector<char> > &maze, int startX, int startY) {
   std::stack<Cell *> stack;
   stack.push(new Cell(startX, startY, nullptr, 0));
 

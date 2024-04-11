@@ -3,8 +3,8 @@
 #include <iostream>
 #include <thread>
 
-std::vector<std::vector<char>> loadMaze(const std::string &filename) {
-  std::vector<std::vector<char>> maze;
+std::vector<std::vector<char> > loadMaze(const std::string &filename) {
+  std::vector<std::vector<char> > maze;
   std::ifstream file(filename);
   std::string line;
 
@@ -33,7 +33,7 @@ void clearScreen() {
 #endif
 }
 
-void renderMaze(const std::vector<std::vector<char>> &maze, int delay,
+void renderMaze(const std::vector<std::vector<char> > &maze, int delay,
                 bool pad) {
   clearScreen();
   for (const auto &row : maze) {
@@ -51,7 +51,7 @@ void renderMaze(const std::vector<std::vector<char>> &maze, int delay,
 }
 
 // int main() {
-//   std::vector<std::vector<char>> maze = loadMaze("maze.txt");
+//   std::vector<std::vector<char> > maze = loadMaze("maze.txt");
 //   std::cout << maze.size() << " " << maze[0].size() << std::endl;
 //   for (const auto &row : maze) {
 //     std::cout << row.size() << " ";

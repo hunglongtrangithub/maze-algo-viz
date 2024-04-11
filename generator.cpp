@@ -47,7 +47,7 @@ public:
     }
   }
 };
-void randomizedKruskals(std::vector<std::vector<char>> &maze) {
+void randomizedKruskals(std::vector<std::vector<char> > &maze) {
   std::random_device rd;  // Obtain a random number from hardware
   std::mt19937 gen(rd()); // Seed the generator
   srand(time(nullptr));   // Seed random number generation
@@ -56,7 +56,7 @@ void randomizedKruskals(std::vector<std::vector<char>> &maze) {
   int width = maze[0].size();
   UnionFind uf(width * height);
 
-  std::vector<std::pair<int, int>> edges;
+  std::vector<std::pair<int, int> > edges;
   // Initialize the maze and collect possible edges
   for (int y = 1; y < height - 1; y += 2) {
     for (int x = 1; x < width - 1; x += 2) {
@@ -92,7 +92,7 @@ char chooseOrientation(int width, int height) {
   else
     return (rand() % 2) == 0 ? 'h' : 'v';
 }
-void divide(std::vector<std::vector<char>> &maze, int yStart, int yEnd,
+void divide(std::vector<std::vector<char> > &maze, int yStart, int yEnd,
             int xStart, int xEnd, char orientation) {
   if (yEnd <= yStart || xEnd <= xStart) {
     return;
@@ -132,7 +132,7 @@ void divide(std::vector<std::vector<char>> &maze, int yStart, int yEnd,
            chooseOrientation(xEnd - xMid - 1, yEnd - yStart));
   }
 }
-void recursiveDivision(std::vector<std::vector<char>> &maze) {
+void recursiveDivision(std::vector<std::vector<char> > &maze) {
   srand(time(nullptr)); // Seed random generator
 
   int height = maze.size();
@@ -152,9 +152,9 @@ void recursiveDivision(std::vector<std::vector<char>> &maze) {
          chooseOrientation(width - 2, height - 2));
 }
 
-std::vector<std::pair<int, int>>
-getUnvisitedNeighbors(int x, int y, std::vector<std::vector<char>> &maze) {
-  std::vector<std::pair<int, int>> neighbors;
+std::vector<std::pair<int, int> >
+getUnvisitedNeighbors(int x, int y, std::vector<std::vector<char> > &maze) {
+  std::vector<std::pair<int, int> > neighbors;
   for (int i = 0; i < 4; ++i) {
     int nx = x + dx[i] * 2;
     int ny = y + dy[i] * 2;
@@ -166,7 +166,7 @@ getUnvisitedNeighbors(int x, int y, std::vector<std::vector<char>> &maze) {
   return neighbors;
 }
 
-void randomizedPrims(std::vector<std::vector<char>> &maze) {
+void randomizedPrims(std::vector<std::vector<char> > &maze) {
   srand(time(nullptr)); // Seed random number generation
 
   // Initialize the maze with walls
@@ -182,13 +182,14 @@ void randomizedPrims(std::vector<std::vector<char>> &maze) {
   maze[startX][startY] = EMPTY;
 
   // Initialize the list with the starting point
-  std::vector<std::pair<int, int>> list;
-  list.push_back({startX, startY});
+  std::vector<std::pair<int, int> > list;
+  list.push_back(std::make_pair(startX, startY));
 
   while (!list.empty()) {
     // Randomly select a cell from the list
     int index = rand() % list.size();
-    auto [x, y] = list[index];
+    int x = list[index].first;
+    int y = list[index].second;
     auto neighbors = getUnvisitedNeighbors(x, y, maze);
 
     // If the cell has no unvisited neighbors, remove it from the list
@@ -206,18 +207,19 @@ void randomizedPrims(std::vector<std::vector<char>> &maze) {
 
     // Randomly select a neighbor
     int nextIndex = rand() % neighbors.size();
-    auto [nx, ny] = neighbors[nextIndex];
+    int nx = neighbors[nextIndex].first;
+    int ny = neighbors[nextIndex].second;
 
     // Remove the wall between the current cell and the selected neighbor
     maze[ny][nx] = EMPTY;
     maze[(y + ny) / 2][(x + nx) / 2] = EMPTY;
     renderMaze(maze);
 
-    list.push_back({nx, ny});
+    list.push_back(std::make_pair(nx, ny));
   }
 }
 
-void randomizedDFS(std::vector<std::vector<char>> &maze) {
+void randomizedDFS(std::vector<std::vector<char> > &maze) {
   srand(time(nullptr)); // Seed random number generation
 
   // Initialize the maze with walls
@@ -232,34 +234,37 @@ void randomizedDFS(std::vector<std::vector<char>> &maze) {
   maze[startX][startY] = EMPTY;
 
   // Initialize the stack with the starting point
-  std::stack<std::pair<int, int>> stack;
-  stack.push({startX, startY});
+  std::stack<std::pair<int, int> > stack;
+  stack.push(std::make_pair(startX, startY));
 
   while (!stack.empty()) {
-    auto [x, y] = stack.top();
+    int x = stack.top().first;
+    int y = stack.top().second;
     stack.pop();
 
-    auto neighbors = getUnvisitedNeighbors(x, y, maze);
+    std::vector<std::pair<int, int> > neighbors =
+        getUnvisitedNeighbors(x, y, maze);
     if (!neighbors.empty()) {
-      stack.push({x, y});
+      stack.push(std::make_pair(x, y));
 
       // Randomly select a neighbor
       int nextIndex = rand() % neighbors.size();
-      auto [nx, ny] = neighbors[nextIndex];
+      int nx = neighbors[nextIndex].first;
+      int ny = neighbors[nextIndex].second;
 
       // Remove the wall between the current cell and the selected neighbor
       maze[ny][nx] = EMPTY;
       maze[y + (ny - y) / 2][x + (nx - x) / 2] = EMPTY;
       renderMaze(maze);
 
-      stack.push({nx, ny});
+      stack.push(std::make_pair(nx, ny));
     }
   }
 }
 
-std::vector<std::vector<char>>
+std::vector<std::vector<char> >
 generateMaze(int width = 21, int height = 21,
-             std::function<void(std::vector<std::vector<char>> &)> carveMaze =
+             std::function<void(std::vector<std::vector<char> > &)> carveMaze =
                  randomizedDFS) {
   srand(time(nullptr)); // Seed for random number generation
 
@@ -268,19 +273,19 @@ generateMaze(int width = 21, int height = 21,
   height |= 1;
 
   // Initialize maze with walls
-  std::vector<std::vector<char>> maze(height, std::vector<char>(width, WALL));
+  std::vector<std::vector<char> > maze(height, std::vector<char>(width, WALL));
 
   carveMaze(maze);
 
   return maze;
 }
 
-/* #include <iostream> */
-/* int main() { */
-/*   std::vector<std::vector<char>> maze = generateMaze(48, 41,
- * randomizedKruskals); */
-/*   std::cout << "Maze generated!" << std::endl; */
-/*   std::cout << maze.size() << "x" << maze[0].size() << std::endl; */
-/**/
-/*   return 0; */
-/* } */
+// #include <iostream>
+// int main() {
+//   std::vector<std::vector<char> > maze =
+//       generateMaze(48, 41, randomizedKruskals);
+//   std::cout << "Maze generated!" << std::endl;
+//   std::cout << maze.size() << "x" << maze[0].size() << std::endl;
+
+//   return 0;
+// }
