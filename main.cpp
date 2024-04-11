@@ -1,7 +1,7 @@
-#include "maze_definitions.h"
-#include "maze_generator.h"
-#include "maze_solver.h"
-#include "maze_utils.h"
+#include "definitions.h"
+#include "generator.h"
+#include "solver.h"
+#include "utils.h"
 #include <iostream>
 #include <vector>
 

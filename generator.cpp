@@ -1,12 +1,12 @@
-#include "maze_definitions.h"
-#include "maze_utils.h"
+#include "definitions.h"
+#include "utils.h"
+#include <algorithm>  // For std::shuffle
 #include <cstdlib>    // For rand() and srand()
 #include <ctime>      // For time()
 #include <functional> // For std::function
+#include <random>     // For std::mt19937
 #include <stack>
 #include <vector>
-#include <algorithm> // For std::shuffle
-#include <random>    // For std::mt19937
 
 // Directions: N, S, E, W
 const int dx[4] = {0, 0, 1, -1};
@@ -48,9 +48,9 @@ public:
   }
 };
 void randomizedKruskals(std::vector<std::vector<char>> &maze) {
-  std::random_device rd; // Obtain a random number from hardware
+  std::random_device rd;  // Obtain a random number from hardware
   std::mt19937 gen(rd()); // Seed the generator
-  srand(time(nullptr)); // Seed random number generation
+  srand(time(nullptr));   // Seed random number generation
 
   int height = maze.size();
   int width = maze[0].size();
@@ -61,8 +61,10 @@ void randomizedKruskals(std::vector<std::vector<char>> &maze) {
   for (int y = 1; y < height - 1; y += 2) {
     for (int x = 1; x < width - 1; x += 2) {
       maze[y][x] = EMPTY;
-      if (x < width - 2) edges.emplace_back(y * width + x, y * width + x + 2);
-      if (y < height - 2) edges.emplace_back(y * width + x, (y + 2) * width + x);
+      if (x < width - 2)
+        edges.emplace_back(y * width + x, y * width + x + 2);
+      if (y < height - 2)
+        edges.emplace_back(y * width + x, (y + 2) * width + x);
     }
   }
 
@@ -70,7 +72,7 @@ void randomizedKruskals(std::vector<std::vector<char>> &maze) {
   std::shuffle(edges.begin(), edges.end(), gen);
 
   // Process each edge
-  for (auto& edge : edges) {
+  for (auto &edge : edges) {
     int cell1 = edge.first;
     int cell2 = edge.second;
     if (uf.find(cell1) != uf.find(cell2)) {
@@ -90,15 +92,18 @@ char chooseOrientation(int width, int height) {
   else
     return (rand() % 2) == 0 ? 'h' : 'v';
 }
-void divide(std::vector<std::vector<char>>& maze, int yStart, int yEnd, int xStart, int xEnd, char orientation) {
+void divide(std::vector<std::vector<char>> &maze, int yStart, int yEnd,
+            int xStart, int xEnd, char orientation) {
   if (yEnd <= yStart || xEnd <= xStart) {
     return;
   }
 
   bool horizontal = orientation == 'h';
 
-  int yMid = horizontal ? yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1 : yStart;
-  int xMid = !horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1 : xStart;
+  int yMid =
+      horizontal ? yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1 : yStart;
+  int xMid =
+      !horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1 : xStart;
 
   // Add a wall
   for (int i = yStart; i <= yEnd; ++i) {
@@ -109,20 +114,25 @@ void divide(std::vector<std::vector<char>>& maze, int yStart, int yEnd, int xSta
     }
   }
   // Add a hole in the wall
-  int hole = horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1 : yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1;
+  int hole = horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1
+                        : yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1;
   maze[horizontal ? yMid : hole][horizontal ? hole : xMid] = EMPTY;
   renderMaze(maze);
 
   // Recursively divide the two parts
   if (horizontal) {
-    divide(maze, yStart, yMid - 1, xStart, xEnd, chooseOrientation(xEnd - xStart, yMid - yStart - 1));
-    divide(maze, yMid + 1, yEnd, xStart, xEnd, chooseOrientation(xEnd - xStart, yEnd - yMid - 1));
+    divide(maze, yStart, yMid - 1, xStart, xEnd,
+           chooseOrientation(xEnd - xStart, yMid - yStart - 1));
+    divide(maze, yMid + 1, yEnd, xStart, xEnd,
+           chooseOrientation(xEnd - xStart, yEnd - yMid - 1));
   } else {
-    divide(maze, yStart, yEnd, xStart, xMid - 1, chooseOrientation(xMid - xStart - 1, yEnd - yStart));
-    divide(maze, yStart, yEnd, xMid + 1, xEnd, chooseOrientation(xEnd - xMid - 1, yEnd - yStart));
+    divide(maze, yStart, yEnd, xStart, xMid - 1,
+           chooseOrientation(xMid - xStart - 1, yEnd - yStart));
+    divide(maze, yStart, yEnd, xMid + 1, xEnd,
+           chooseOrientation(xEnd - xMid - 1, yEnd - yStart));
   }
 }
-void recursiveDivision(std::vector<std::vector<char>>& maze) {
+void recursiveDivision(std::vector<std::vector<char>> &maze) {
   srand(time(nullptr)); // Seed random generator
 
   int height = maze.size();
@@ -131,12 +141,15 @@ void recursiveDivision(std::vector<std::vector<char>>& maze) {
   // Initialize the maze with walls
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
-      maze[y][x] = (y == 0 || x == 0 || y == height - 1 || x == width - 1) ? WALL : EMPTY;
+      maze[y][x] = (y == 0 || x == 0 || y == height - 1 || x == width - 1)
+                       ? WALL
+                       : EMPTY;
     }
   }
 
   // Start the division
-  divide(maze, 1, height - 2, 1, width - 2, chooseOrientation(width - 2, height - 2));
+  divide(maze, 1, height - 2, 1, width - 2,
+         chooseOrientation(width - 2, height - 2));
 }
 
 std::vector<std::pair<int, int>>
@@ -264,7 +277,8 @@ generateMaze(int width = 21, int height = 21,
 
 /* #include <iostream> */
 /* int main() { */
-/*   std::vector<std::vector<char>> maze = generateMaze(48, 41, randomizedKruskals); */
+/*   std::vector<std::vector<char>> maze = generateMaze(48, 41,
+ * randomizedKruskals); */
 /*   std::cout << "Maze generated!" << std::endl; */
 /*   std::cout << maze.size() << "x" << maze[0].size() << std::endl; */
 /**/

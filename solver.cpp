@@ -1,5 +1,5 @@
-#include "maze_definitions.h"
-#include "maze_utils.h"
+#include "definitions.h"
+#include "utils.h"
 #include <functional>
 #include <queue>
 #include <stack>
