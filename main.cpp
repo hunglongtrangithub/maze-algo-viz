@@ -9,12 +9,12 @@ int main() {
   // Load the maze
   std::vector<std::vector<char>> maze = loadMaze("cpp_logo.txt");
 
-  // Initial welcome message
-  std::cout << "Welcome to the Maze Generator and Solver!" << std::endl;
-
   // Clear screen and print the initial maze
   clearScreen();
   renderMaze(maze, 0, false);
+
+  // Initial welcome message
+  std::cout << "Welcome to the Maze Generator and Solver!" << std::endl;
 
   // Prompt the user to enter maze dimensions
   std::cout << "Enter the width and height of the maze (odd numbers only):"
