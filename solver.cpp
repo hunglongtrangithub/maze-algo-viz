@@ -3,6 +3,7 @@
 #include <functional>
 #include <queue>
 #include <stack>
+#include <limits>
 
 // Helper structure to keep track of positions and their predecessors
 struct Cell {
