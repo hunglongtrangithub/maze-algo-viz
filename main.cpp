@@ -24,12 +24,12 @@ int main() {
   
   // Validate the dimensions
   if (width < 5 || height < 5) {
-    std::cout << "Invalid dimensions. Using the default dimensions." << std::endl;
+    std::cout << "Dimensions too small. Using the default dimensions." << std::endl;
     width = 29;
     height = 21;
   }
   if (width % 2 == 0 || height % 2 == 0) {
-    std::cout << "Invalid dimensions. Using the default dimensions." << std::endl;
+    std::cout << "Dimensions not odd. Using the default dimensions." << std::endl;
     width = 29;
     height = 21;
   }
