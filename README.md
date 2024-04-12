@@ -26,9 +26,7 @@ This project is a visualization of different maze generating and solving algorit
 1. Clone the repository
 2. Run the following commands:
 
-````
 ```bash
 g++ -std=c++11 *.cpp
 ./a.out
 ```
-````
