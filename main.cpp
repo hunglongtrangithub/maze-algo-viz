@@ -5,6 +5,26 @@
 #include <iostream>
 #include <vector>
 
+void takeDimensions(int &width, int &height) {
+  std::cout << "Width: ";
+  std::cin >> width;
+  std::cout << "Height: ";
+  std::cin >> height;
+  // Validate the dimensions
+  if (width < 5 || height < 5) {
+    std::cout << "Dimensions too small. Please try again." << std::endl;
+    takeDimensions(width, height);
+  }
+  if (width > 50 || height > 50) {
+    std::cout << "Dimensions too large. Please try again." << std::endl;
+    takeDimensions(width, height);
+  }
+  if (width % 2 == 0 || height % 2 == 0) {
+    std::cout << "All dimensions must be odd. Please try again." << std::endl;
+    takeDimensions(width, height);
+  }
+}
+
 int main() {
   // Load the maze
   std::vector<std::vector<char>> maze = loadMaze("cpp_logo.txt");
@@ -17,27 +37,12 @@ int main() {
   std::cout << "Welcome to the Maze Generator and Solver!" << std::endl;
 
   // Prompt the user to enter maze dimensions
-  std::cout << "Enter the width and height of the maze (odd numbers only):"
-            << std::endl;
+  std::cout << "Enter the width and height of the maze." << std::endl;
+  std::cout << "Width and height must be odd numbers between 5 and 50." << std::endl;
+
   int width, height;
-  std::cin >> width >> height;
-  
-  // Validate the dimensions
-  if (width < 5 || height < 5) {
-    std::cout << "Dimensions too small. Using the default dimensions." << std::endl;
-    width = 29;
-    height = 21;
-  }
-  if (width > 50 || height > 50) {
-    std::cout << "Dimensions too large. Using the default dimensions." << std::endl;
-    width = 29;
-    height = 21;
-  }
-  if (width % 2 == 0 || height % 2 == 0) {
-    std::cout << "Dimensions not odd. Using the default dimensions." << std::endl;
-    width = 29;
-    height = 21;
-  }
+  takeDimensions(width, height);
+
   // Prompt the user to choose a maze generator
   std::cout << "1. Randomized Depth-First Search" << std::endl;
   std::cout << "2. Randomized Prim's Algorithm" << std::endl;
