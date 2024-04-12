@@ -28,6 +28,11 @@ int main() {
     width = 29;
     height = 21;
   }
+  if (width > 50 || height > 50) {
+    std::cout << "Dimensions too large. Using the default dimensions." << std::endl;
+    width = 29;
+    height = 21;
+  }
   if (width % 2 == 0 || height % 2 == 0) {
     std::cout << "Dimensions not odd. Using the default dimensions." << std::endl;
     width = 29;
