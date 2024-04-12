@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <thread>
+#include <string>
+#include <vector>
 
 std::vector<std::vector<char> > loadMaze(const std::string &filename) {
   std::vector<std::vector<char> > maze;
