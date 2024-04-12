@@ -179,7 +179,6 @@ void randomizedPrims(std::vector<std::vector<char> > &maze) {
   // Initialize the starting point
   int startX = 1 + rand() % (maze[0].size() / 2) * 2;
   int startY = 1 + rand() % (maze.size() / 2) * 2;
-  maze[startX][startY] = EMPTY;
 
   // Initialize the list with the starting point
   std::vector<std::pair<int, int> > list;
