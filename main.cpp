@@ -21,7 +21,18 @@ int main() {
             << std::endl;
   int width, height;
   std::cin >> width >> height;
-
+  
+  // Validate the dimensions
+  if (width < 5 || height < 5) {
+    std::cout << "Invalid dimensions. Using the default dimensions." << std::endl;
+    width = 29;
+    height = 21;
+  }
+  if (width % 2 == 0 || height % 2 == 0) {
+    std::cout << "Invalid dimensions. Using the default dimensions." << std::endl;
+    width = 29;
+    height = 21;
+  }
   // Prompt the user to choose a maze generator
   std::cout << "1. Randomized Depth-First Search" << std::endl;
   std::cout << "2. Randomized Prim's Algorithm" << std::endl;
