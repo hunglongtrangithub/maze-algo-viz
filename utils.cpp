@@ -36,7 +36,7 @@ void clearScreen() {
 }
 
 void renderMaze(const std::vector<std::vector<char> > &maze, int delay,
-                bool pad) {
+                bool pad, std::string message) {
   clearScreen();
   for (const auto &row : maze) {
     for (char cell : row) {
@@ -47,6 +47,9 @@ void renderMaze(const std::vector<std::vector<char> > &maze, int delay,
       }
     }
     std::cout << '\n';
+  }
+  if (!message.empty()) {
+    std::cout << message << std::endl;
   }
   std::this_thread::sleep_for(
       std::chrono::milliseconds(delay)); // Slow down for visualization

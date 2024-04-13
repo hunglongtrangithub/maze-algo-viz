@@ -8,7 +8,7 @@
 std::vector<std::vector<char> > loadMaze(const std::string &filename);
 // Function to render a maze
 void renderMaze(const std::vector<std::vector<char> > &maze, int delay = 5,
-                bool pad = true);
+                bool pad = true, std::string message = "");
 // Function to clear the screen
 void clearScreen();
 #endif // MAZE_UTILS_H
