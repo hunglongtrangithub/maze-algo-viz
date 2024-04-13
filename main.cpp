@@ -83,23 +83,26 @@ int main() {
   // Set the start and goal positions
   int startX = 1;
   int startY = 1;
+  int goalX = maze[0].size() - 2;
+  int goalY = maze.size() - 2;
+
   maze[startY][startX] = START;
-  maze[maze.size() - 2][maze[0].size() - 2] = GOAL;
+  maze[goalY][goalX] = GOAL;
 
   // Attempt to find a path using the selected algorithm
   bool pathFound = false;
   switch (choice) {
   case 1:
-    pathFound = findPathDFS(maze, startX, startY);
+    pathFound = findPathDFS(maze, startX, startY, goalX, goalY);
     break;
   case 2:
-    pathFound = findPathBFS(maze, startX, startY);
+    pathFound = findPathBFS(maze, startX, startY, goalX, goalY);
     break;
   case 3:
-    pathFound = findPathDijkstra(maze, startX, startY);
+    pathFound = findPathDijkstra(maze, startX, startY, goalX, goalY);
     break;
   case 4:
-    pathFound = findPathAStar(maze, startX, startY);
+    pathFound = findPathAStar(maze, startX, startY, goalX, goalY);
     break;
   default:
     std::cout << "Invalid choice." << std::endl;
