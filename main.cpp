@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#define MAX_DIMENSION 50
+
 void takeDimensions(int &width, int &height) {
   std::cout << "Width: ";
   std::cin >> width;
@@ -15,7 +17,7 @@ void takeDimensions(int &width, int &height) {
     std::cout << "Dimensions too small. Please try again." << std::endl;
     takeDimensions(width, height);
   }
-  if (width > 50 || height > 50) {
+  if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
     std::cout << "Dimensions too large. Please try again." << std::endl;
     takeDimensions(width, height);
   }
