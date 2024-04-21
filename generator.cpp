@@ -90,47 +90,52 @@ char chooseOrientation(int width, int height) {
   else if (height < width)
     return 'v';
   else
-    return (rand() % 2) == 0 ? 'h' : 'v';
+    return rand() % 2 ? 'h' : 'v';
 }
-void divide(std::vector<std::vector<char> > &maze, int yStart, int yEnd,
-            int xStart, int xEnd, char orientation) {
-  if (yEnd <= yStart || xEnd <= xStart) {
-    return;
-  }
+void divide(std::vector<std::vector<char> > &maze, int yStart, int yEnd, int xStart, int xEnd) {
+    int yDim = yEnd - yStart;
+    int xDim = xEnd - xStart;
+    
+    if (yDim <= 0 || xDim <= 0)
+        return;
+    bool horizontal = chooseOrientation(xDim, yDim) == 'h';
+    int split, hole;
 
-  bool horizontal = orientation == 'h';
+    if (horizontal) {
+        do {
+            split = std::rand() % (yDim + 1) + yStart;
+        } while (split % 2 != 0);
 
-  int yMid =
-      horizontal ? yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1 : yStart;
-  int xMid =
-      !horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1 : xStart;
+        do {
+            hole = std::rand() % (xDim + 1) + xStart;
+        } while (hole % 2 == 0);
 
-  // Add a wall
-  for (int i = yStart; i <= yEnd; ++i) {
-    for (int j = xStart; j <= xEnd; ++j) {
-      if (horizontal ? i == yMid : j == xMid) {
-        maze[i][j] = WALL;
-      }
+        for (int j = xStart; j <= xEnd; j++) {
+            if (j != hole)
+                maze[split][j] = WALL;
+        }
+        renderMaze(maze);
+
+        divide(maze, yStart, split - 1, xStart, xEnd);
+        divide(maze, split + 1, yEnd, xStart, xEnd);
+    } else {
+        do {
+            split = std::rand() % (xDim + 1) + xStart;
+        } while (split % 2 != 0);
+
+        do {
+            hole = std::rand() % (yDim + 1) + yStart;
+        } while (hole % 2 == 0);
+
+        for (int i = yStart; i <= yEnd; i++) {
+            if (i != hole)
+                maze[i][split] = WALL;
+        }
+        renderMaze(maze);
+
+        divide(maze, yStart, yEnd, xStart, split - 1);
+        divide(maze, yStart, yEnd, split + 1, xEnd);
     }
-  }
-  // Add a hole in the wall
-  int hole = horizontal ? xStart + (rand() % ((xEnd - xStart) / 2)) * 2 + 1
-                        : yStart + (rand() % ((yEnd - yStart) / 2)) * 2 + 1;
-  maze[horizontal ? yMid : hole][horizontal ? hole : xMid] = EMPTY;
-  renderMaze(maze);
-
-  // Recursively divide the two parts
-  if (horizontal) {
-    divide(maze, yStart, yMid - 1, xStart, xEnd,
-           chooseOrientation(xEnd - xStart, yMid - yStart - 1));
-    divide(maze, yMid + 1, yEnd, xStart, xEnd,
-           chooseOrientation(xEnd - xStart, yEnd - yMid - 1));
-  } else {
-    divide(maze, yStart, yEnd, xStart, xMid - 1,
-           chooseOrientation(xMid - xStart - 1, yEnd - yStart));
-    divide(maze, yStart, yEnd, xMid + 1, xEnd,
-           chooseOrientation(xEnd - xMid - 1, yEnd - yStart));
-  }
 }
 void recursiveDivision(std::vector<std::vector<char> > &maze) {
   srand(time(nullptr)); // Seed random generator
@@ -146,10 +151,9 @@ void recursiveDivision(std::vector<std::vector<char> > &maze) {
                        : EMPTY;
     }
   }
-
+  /* renderMaze(maze); */
   // Start the division
-  divide(maze, 1, height - 2, 1, width - 2,
-         chooseOrientation(width - 2, height - 2));
+  divide(maze, 1, height - 2, 1, width - 2);
 }
 
 std::vector<std::pair<int, int> >
