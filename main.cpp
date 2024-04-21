@@ -8,22 +8,41 @@
 #define MAX_DIMENSION 50
 
 void takeDimensions(int &width, int &height) {
-  std::cout << "Width: ";
-  std::cin >> width;
-  std::cout << "Height: ";
-  std::cin >> height;
-  // Validate the dimensions
-  if (width < 5 || height < 5) {
-    std::cout << "Dimensions too small. Please try again." << std::endl;
-    takeDimensions(width, height);
-  }
-  if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
-    std::cout << "Dimensions too large. Please try again." << std::endl;
-    takeDimensions(width, height);
-  }
-  if (width % 2 == 0 || height % 2 == 0) {
-    std::cout << "All dimensions must be odd. Please try again." << std::endl;
-    takeDimensions(width, height);
+  while (true) {
+    std::cout << "Width: ";
+    std::cin >> width;
+    if (std::cin.fail()) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Invalid input. Please enter a number." << std::endl;
+      continue;
+    }
+
+    std::cout << "Height: ";
+    std::cin >> height;
+    if (std::cin.fail()) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Invalid input. Please enter a number." << std::endl;
+      continue;
+    }
+
+    // Validate the dimensions
+    if (width < 5 || height < 5) {
+      std::cout << "Dimensions too small. Please try again." << std::endl;
+      continue;
+    }
+    if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+      std::cout << "Dimensions too large. Please try again." << std::endl;
+      continue;
+    }
+    if (width % 2 == 0 || height % 2 == 0) {
+      std::cout << "All dimensions must be odd. Please try again." << std::endl;
+      continue;
+    }
+
+    // If we reach this point, the input is valid
+    break;
   }
 }
 
@@ -40,7 +59,8 @@ int main() {
 
   // Prompt the user to enter maze dimensions
   std::cout << "Enter the width and height of the maze." << std::endl;
-  std::cout << "Width and height must be odd numbers between 5 and 50." << std::endl;
+  std::cout << "Width and height must be odd numbers between 5 and 50."
+            << std::endl;
 
   int width, height;
   takeDimensions(width, height);
