@@ -3,6 +3,7 @@
 #include "solver.h"
 #include "utils.h"
 #include <iostream>
+#include <limits>
 #include <vector>
 
 #define MAX_DIMENSION 50
