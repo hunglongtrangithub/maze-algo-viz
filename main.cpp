@@ -4,6 +4,7 @@
 #include "utils.h"
 #include <iostream>
 #include <limits>
+#include <thread>
 #include <vector>
 
 #define MAX_DIMENSION 50
@@ -91,6 +92,8 @@ int main() {
     break;
   default:
     std::cout << "Invalid choice. Using the default algorithm." << std::endl;
+    // delay for a few seconds
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     maze = generateMaze(width, height, randomizedDFS);
     break;
   }
@@ -128,7 +131,10 @@ int main() {
     pathFound = findPathAStar(maze, startX, startY, goalX, goalY);
     break;
   default:
-    std::cout << "Invalid choice." << std::endl;
+    std::cout << "Invalid choice. Using the default algorithm." << std::endl;
+    // delay for a few seconds
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    pathFound = findPathDFS(maze, startX, startY, goalX, goalY);
     break;
   }
   if (!pathFound) {
